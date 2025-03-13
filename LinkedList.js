@@ -29,6 +29,7 @@ class ListNode
 
 class LinkedList
 {
+    size = 0;
     constructor()
     {
         this.head = null
@@ -41,7 +42,8 @@ class LinkedList
 
     findMatch(checkFunc)
     {
-        return this.#findMatchRec(this.head)
+        console.log(this.#findMatchRec(checkFunc, this.head))
+        return this.#findMatchRec(checkFunc, this.head)
     }
 
     #findMatchRec(checkFunc, currNode)
@@ -57,10 +59,29 @@ class LinkedList
         return this.#findMatchRec(checkFunc, currNode.next)
     }
 
+    containsKey(key)
+    {
+        return this.#containsKeyRecurse(key, this.head)
+    }
+
+    #containsKeyRecurse(key, currNode)
+    {
+        if (currNode.data.key == key)
+        {
+            return currNode.data
+        }
+        else if (currNode.next == null)
+        {
+            return false
+        }
+        return this.#containsKeyRecurse(key, currNode.next)
+    }
+
     prepend(data)
     {
         let newData = new ListNode(data, this.head)
         this.head = newData
+        this.size += 1
     }
 
     getAll()
@@ -70,6 +91,7 @@ class LinkedList
         while (currNode != null)
         {
             dataArr.push(currNode.data)
+            currNode = currNode.next
         }
         return dataArr
     }
@@ -79,6 +101,7 @@ class LinkedList
         if (checkFunc(this.head.data))
         {
             this.head = this.head.next
+            this.size -= 1
             return 0
         }
         return (this.#removeRecurse(checkFunc, this.head.next, this.head))
@@ -89,6 +112,7 @@ class LinkedList
         if (checkFunc(this.head.data))
         {
             lastNode.next = currNode.next
+            this.size -= 1
             return 0
         }
         if (currNode.next == null)
@@ -97,4 +121,18 @@ class LinkedList
         }
         return this.#removeRecurse(checkFunc, currNode.next, currNode)
     }
+
+    toString()
+    {
+        let output = "( " + this.head.data +" )"
+        let currNode = this.head.next
+        while (currNode != null)
+        {
+            output += " => ( " + currNode.data[0] + " )"
+            currNode = currNode.next
+        }
+        return output
+    }
 }
+
+export {LinkedList, ListNode}
